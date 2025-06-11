@@ -1,16 +1,19 @@
-﻿Folder PATH listing for volume Windows
+﻿
+Folder PATH listing for volume Windows
 Volume serial number is DCAD-22AF
 C:.
 |   .dockerignore
 |   .env
 |   .env_example
 |   .gitignore
+|   alembic.ini
 |   docker-compose.yaml
 |   Dockerfile
 |   entrypoint.sh
 |   nginx.conf
 |   project_structure.txt
 |   README.md
+|   requirements.txt
 |   
 +---src
 |   |   celery_worker.py
@@ -19,11 +22,13 @@ C:.
 |   |   __init__.py
 |   |   
 |   +---db
-|   |       base.py
-|   |       connection.py
-|   |       uow.py
-|   |       __init__.py
-|   |       
+|   |   |   base.py
+|   |   |   connection.py
+|   |   |   uow.py
+|   |   |   __init__.py
+|   |   |   
+|   |   \---__pycache__
+|   |           
 |   +---dependencies
 |   |       services.py
 |   |       uow.py
@@ -41,11 +46,25 @@ C:.
 |   |       sftp.py
 |   |       __init__.py
 |   |       
+|   +---migrations
+|   |   |   env.py
+|   |   |   README
+|   |   |   script.py.mako
+|   |   |   
+|   |   +---versions
+|   |   |   |   2025_06_11_2008-104df64fbaff_first_migration.py
+|   |   |   |   
+|   |   |   \---__pycache__
+|   |   |           
+|   |   \---__pycache__
+|   |           
 |   +---models
-|   |       files.py
-|   |       servers.py
-|   |       __init__.py
-|   |       
+|   |   |   files.py
+|   |   |   servers.py
+|   |   |   __init__.py
+|   |   |   
+|   |   \---__pycache__
+|   |           
 |   +---repositories
 |   |       base.py
 |   |       files.py
@@ -69,10 +88,13 @@ C:.
 |   |       download_file.py
 |   |       __init__.py
 |   |       
-|   \---utils
-|           logging.py
-|           __init__.py
+|   +---utils
+|   |       logging.py
+|   |       __init__.py
+|   |       
+|   \---__pycache__
 |           
-\---tests
-        __init__.py
-        
++---tests
+|       __init__.py
+|       
+
