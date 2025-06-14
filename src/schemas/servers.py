@@ -3,15 +3,12 @@ from datetime import datetime
 from pydantic import BaseModel
 
 class ServerSchemaCreate(BaseModel):
-    id: uuid.UUID | None = None
     host: str
     port: int | None = 22
     username: str
     password: str
     folder_path: str
     is_active: bool | None = True
-    created_at: datetime | None = None
-    updated_at: datetime | None = None
 
 class ServerSchemaRead(BaseModel):
     id: uuid.UUID
@@ -23,6 +20,9 @@ class ServerSchemaRead(BaseModel):
     is_active: bool | None = True
     created_at: datetime | None = None
     updated_at: datetime | None = None
+
+    class Config:
+        from_attributes = True
 
 class ServerSchemaUpdate(BaseModel):
     id: uuid.UUID | None = None

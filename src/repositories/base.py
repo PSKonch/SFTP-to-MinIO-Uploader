@@ -33,11 +33,11 @@ class BaseRepository:
         model = result.scalars().one()
         return self.schema.from_orm(model)
     
-    async def edit(self, data: BaseModel, exclude_unset: bool = False, **filter_by) -> None:
+    async def edit(self, filter_by: dict, data: dict) -> None:
         update_stmt = (
             update(self.model)
             .filter_by(**filter_by)
-            .values(**data.model_dump(exclude_unset=exclude_unset))
+            .values(**data)
         )
         await self.session.execute(update_stmt)
 
