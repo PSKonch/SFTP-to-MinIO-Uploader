@@ -2,6 +2,8 @@ from fastapi import APIRouter
 
 from src.dependencies.uow import UoW
 from src.schemas.servers import ServerSchemaCreate, ServerSchemaUpdate
+from src.services.scanner import scan_and_store_files
+from src.services.sftp_to_minio import streaming_files_from_sftp_to_minio
 
 router = APIRouter(prefix="/servers", tags=["servers"])
 
@@ -48,15 +50,27 @@ async def create_server(server: ServerSchemaCreate, uow: UoW):
     await uow.commit()
     return result
 
-@router.post("/scan_files")
-async def scan_files_endpoint(server_id: str, uow: UoW):
-    server = await uow.servers.get_server_by_id(server_id)
-    # await scan_and_store_files_for_server(server, uow.files)
-    return {"status": "ok"}
+@router.post("/to_minio/")
+async def stream_files_to_minio(uow: UoW):
+    """
+    Потоковая передача файлов с SFTP-сервера в MinIO
 
-@router.post("/")
-async def create_server(server: ServerSchemaCreate, uow: UoW):
-    return await uow.servers.create_server(server)
+    Args:
+        server (ServerSchemaCreate): Данные сервера для создания подключения
+        uow (UoW): Объект единицы работы для доступа к базе данных
+
+    Returns:
+        result (ServerSchemaRead): Данные добавленного сервера
+    """
+    await streaming_files_from_sftp_to_minio(uow)
+
+@router.post("/scan_files")
+async def scan_files_endpoint(uow: UoW):
+    """
+    Ручное сканирование файлов на SFTP-сервере и их добавление в базу данных
+    """
+    await scan_and_store_files(uow)
+    return {"status": "ok"}
 
 @router.get("/{server_id}")
 async def get_server(server_id: str, uow: UoW):

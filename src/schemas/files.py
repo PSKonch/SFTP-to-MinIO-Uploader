@@ -2,6 +2,7 @@ import uuid
 from pydantic import BaseModel
 
 from src.models.files import FileStatus
+from src.schemas.servers import ServerSchemaRead
 
 class FileSchemaCreate(BaseModel):
     server_id: uuid.UUID
@@ -23,6 +24,7 @@ class FileSchemaRead(BaseModel):
     status: FileStatus
     minio_key: str | None
     error_message: str | None
+    server: ServerSchemaRead
 
     class Config:
         from_attributes = True
