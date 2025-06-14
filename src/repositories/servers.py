@@ -6,7 +6,10 @@ from src.schemas.servers import ServerSchemaCreate, ServerSchemaRead, ServerSche
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
-class ServerRepository(BaseRepository[ServerModel, ServerSchemaCreate, ServerSchemaRead, ServerSchemaUpdate, ServerSchemaDelete]):
+class ServerRepository(BaseRepository):
+    model = ServerModel
+    schema = ServerSchemaRead
+    
     def __init__(self, session: AsyncSession):
         super().__init__(session)
 
@@ -14,6 +17,15 @@ class ServerRepository(BaseRepository[ServerModel, ServerSchemaCreate, ServerSch
         return await self.get_one_or_none(id=server_id)
 
     async def create_server(self, server: ServerSchemaCreate) -> ServerSchemaRead:
+        """
+        Добавление нового сервера в пул базы данных
+
+        Args:
+            server (ServerSchemaCreate): Данные сервера для добавления
+
+        Returns:
+            ServerSchemaRead: Данные добавленного сервера
+        """
         return await self.add(server)
 
     async def update_server(self, server_id: uuid.UUID, server: ServerSchemaUpdate) -> None:

@@ -24,6 +24,9 @@ class FileSchemaRead(BaseModel):
     minio_key: str | None
     error_message: str | None
 
+    class Config:
+        from_attributes = True
+
 class FileSchemaUpdate(BaseModel):
     server_id: uuid.UUID | None = None
     file_path: str | None = None

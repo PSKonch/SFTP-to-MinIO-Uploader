@@ -5,7 +5,10 @@ from src.models.files import FileModel
 from src.schemas.files import FileSchemaCreate, FileSchemaRead, FileSchemaUpdate, FileSchemaDelete
 from sqlalchemy.ext.asyncio import AsyncSession
 
-class FileRepository(BaseRepository[FileModel, FileSchemaCreate, FileSchemaRead, FileSchemaUpdate, FileSchemaDelete]):
+class FileRepository(BaseRepository):
+    model = FileModel
+    schema = FileSchemaRead
+
     def __init__(self, session: AsyncSession):
         super().__init__(session)
 

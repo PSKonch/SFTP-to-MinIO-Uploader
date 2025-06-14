@@ -4,6 +4,8 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.openapi.docs import get_swagger_ui_html
 
+from src.endpoints.servers import router as server_router
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     yield
@@ -14,6 +16,8 @@ app = FastAPI(
     description="A FastAPI application for uploading files from SFTP to MinIO",
     lifespan=lifespan
 )
+
+app.include_router(server_router)
 
 @app.get("/docs", include_in_schema=False)
 async def custom_swagger_ui_html():
