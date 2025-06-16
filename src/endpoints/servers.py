@@ -1,9 +1,11 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from minio import Minio
 
 from src.dependencies.uow import UoW
 from src.schemas.servers import ServerSchemaCreate, ServerSchemaUpdate
 from src.services.scanner import scan_and_store_files
 from src.services.sftp_to_minio import streaming_files_from_sftp_to_minio
+from src.minio import get_minio_client
 
 router = APIRouter(prefix="/servers", tags=["servers"])
 
@@ -51,7 +53,7 @@ async def create_server(server: ServerSchemaCreate, uow: UoW):
     return result
 
 @router.post("/to_minio/")
-async def stream_files_to_minio(uow: UoW):
+async def stream_files_to_minio(uow: UoW, minio: Minio = Depends(get_minio_client)):
     """
     Потоковая передача файлов с SFTP-сервера в MinIO
 
@@ -62,7 +64,7 @@ async def stream_files_to_minio(uow: UoW):
     Returns:
         result (ServerSchemaRead): Данные добавленного сервера
     """
-    await streaming_files_from_sftp_to_minio(uow)
+    await streaming_files_from_sftp_to_minio(uow, minio)
 
 @router.post("/scan_files")
 async def scan_files_endpoint(uow: UoW):
